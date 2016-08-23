@@ -160,6 +160,7 @@ JsonWriter& JsonWriter::separator(){
 }
 JsonWriter& JsonWriter::endObject(){
 	stream->print("}");
+        firstElement = false;
 	return *this;
 }
 
@@ -188,6 +189,7 @@ JsonWriter& JsonWriter::beginArray(String name){
 
 JsonWriter& JsonWriter::endArray(){
 	stream->print("]");
+        firstElement = false;
 	return *this;
 }
 
