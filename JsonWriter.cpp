@@ -14,6 +14,15 @@ void JsonWriter::ifSeparator(){
 }
 
 JsonWriter& JsonWriter::beginObject(){
+        if(!documentStarted) {
+            documentStarted = true;
+            objectBase = true;
+        }
+        
+        if(objectBase) {
+                totalOpened++;
+        }
+        
         if(!separatorAlreadyCalled){
           ifSeparator();
           separatorAlreadyCalled = true;
@@ -161,10 +170,28 @@ JsonWriter& JsonWriter::separator(){
 JsonWriter& JsonWriter::endObject(){
 	stream->print("}");
         firstElement = false;
+        
+        if (objectBase){
+            totalOpened--;
+            if(totalOpened <=0){
+                /* Document end*/
+                reset();
+            }
+        }
+        
 	return *this;
 }
 
 JsonWriter& JsonWriter::beginArray(){
+        if(!documentStarted) {
+            documentStarted = true;
+            arrayBase = true;
+        }
+        
+        if(objectBase) {
+                totalOpened++;
+        }
+        
         if(!separatorAlreadyCalled){
           ifSeparator();
         }
@@ -190,6 +217,13 @@ JsonWriter& JsonWriter::beginArray(String name){
 JsonWriter& JsonWriter::endArray(){
 	stream->print("]");
         firstElement = false;
+        if (arrayBase){
+            totalOpened--;
+            if(totalOpened <=0){
+                /* Document end*/
+                reset();
+            }
+        }
 	return *this;
 }
 
@@ -277,4 +311,13 @@ JsonWriter& JsonWriter::boolean(bool value){
           ifSeparator();
 	stream->print(value ? "true" : "false");
 	return *this;
+}
+
+JsonWriter& JsonWriter::reset(){
+        documentStarted = false;
+        objectBase = false;
+        arrayBase = false;
+        totalOpened = 0;
+        firstElement = true;
+        separatorAlreadyCalled = false;
 }

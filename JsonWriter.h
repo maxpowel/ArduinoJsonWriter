@@ -6,6 +6,11 @@
 class JsonWriter {
 private:
 	Stream* stream;
+        /* The the state of the document */
+        bool documentStarted = false;
+        bool objectBase = false;
+        bool arrayBase = false;
+        int totalOpened = 0;
         /* The first element should not print a separator before them */
         bool firstElement = true;
         /* When the separator is already written, it should never be printed again until next element.
@@ -14,23 +19,25 @@ private:
            arrays of base types (array of integers for example)*/
         bool separatorAlreadyCalled = false;
         void ifSeparator();
+        
+        void reset();
 
 public:
 	JsonWriter(Stream* stream);
 
 	JsonWriter& beginObject();
-  JsonWriter& beginObject(String name);
+        JsonWriter& beginObject(String name);
 	JsonWriter& memberName(char* name);
 	JsonWriter& memberName(String name);
 	JsonWriter& separator();
 	JsonWriter& endObject();
 
 	JsonWriter& beginArray();
-  JsonWriter& beginArray(String name);
+        JsonWriter& beginArray(String name);
 	JsonWriter& endArray();
 
 	JsonWriter& property(String name, char* value);
-  JsonWriter& property(String name, String value);
+        JsonWriter& property(String name, String value);
 
 	JsonWriter& property(String name, int value);
 	JsonWriter& property(String name, unsigned int value);
@@ -39,9 +46,9 @@ public:
 	JsonWriter& property(String name, short value);
 	JsonWriter& property(String name, unsigned short value);
 	JsonWriter& property(String name, byte value);
-  JsonWriter& property(String name, float value);
-  JsonWriter& property(String name, double value);
-  JsonWriter& property(String name, bool value);
+        JsonWriter& property(String name, float value);
+        JsonWriter& property(String name, double value);
+        JsonWriter& property(String name, bool value);
 
 
 
