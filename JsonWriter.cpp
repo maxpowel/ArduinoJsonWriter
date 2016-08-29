@@ -313,7 +313,7 @@ JsonWriter& JsonWriter::boolean(bool value){
 	return *this;
 }
 
-JsonWriter& JsonWriter::reset(){
+void JsonWriter::reset(){
         documentStarted = false;
         objectBase = false;
         arrayBase = false;
