@@ -18,11 +18,11 @@ JsonWriter& JsonWriter::beginObject(){
             documentStarted = true;
             objectBase = true;
         }
-        
+
         if(objectBase) {
                 totalOpened++;
         }
-        
+
         if(!separatorAlreadyCalled){
           ifSeparator();
           separatorAlreadyCalled = true;
@@ -40,6 +40,9 @@ JsonWriter& JsonWriter::beginObject(String name){
         memberName(name);
 	stream->print("{");
         firstElement = true;
+				if(objectBase) {
+                totalOpened++;
+        }
 	return *this;
 }
 
@@ -170,7 +173,7 @@ JsonWriter& JsonWriter::separator(){
 JsonWriter& JsonWriter::endObject(){
 	stream->print("}");
         firstElement = false;
-        
+
         if (objectBase){
             totalOpened--;
             if(totalOpened <=0){
@@ -178,7 +181,7 @@ JsonWriter& JsonWriter::endObject(){
                 reset();
             }
         }
-        
+
 	return *this;
 }
 
@@ -187,11 +190,11 @@ JsonWriter& JsonWriter::beginArray(){
             documentStarted = true;
             arrayBase = true;
         }
-        
+
         if(objectBase) {
                 totalOpened++;
         }
-        
+
         if(!separatorAlreadyCalled){
           ifSeparator();
         }
